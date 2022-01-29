@@ -1,0 +1,97 @@
+# extract_text_from_html_files.sh 
+#
+# USAGE: bash extract_text_from_html_files.sh (use bash, NOT sh)
+#          Need to assign input, output file params by modifying script
+#
+# For getting text from a set of html files downloaded from Canvas for assignments
+#   where students answered using a text input box.
+#
+# modified 2019-01-28 by adc for making CNDM question lists
+# modified 2017.11.24 by adc for "words" in-class assignment
+
+
+# To assign file path that has whitespace to bash variable (other methods exist too):
+#DATA_DIR=~/Google\ Drive/teaching/...
+#
+# Then need to put $Var in quotes when using it, e.g.:
+#sed -i.orig 's/^.*questest.*$//g' "$DATA_DIR/$XML_FILE"
+
+
+# Dir. holding html files downloaded from Canvas
+# NOTE: due to weird behavior of bash variable expansion for a path name with a space in it
+#         when concatenating with a string, need to have ONLY *html files in the HTML_FILES_DIR
+#         (because adc couldn't figure out way to work around $(ls "$IN_DIR"/*html) not working)
+
+HTML_FILES_DIR=~/Google\ Drive/teaching/CNDM/CNDM_2020_spring/discussions/wk15_disorders/textbook/submissions
+
+echo "Input dir. is: $HTML_FILES_DIR"
+
+
+OUT_FILE_DIR=~/Google\ Drive/teaching/CNDM/CNDM_2020_spring/discussions/wk15_disorders/textbook
+
+OUT_FILE_NAME=textbook_questions_UNSORTED.txt
+
+# concatenate the two parts
+outFileFull="$OUT_FILE_DIR/$OUT_FILE_NAME"
+
+
+# Test whether output file already exists
+# If so, prompt user whether to delete and continue or quit.
+
+if [ -f "$outFileFull" ]; then
+
+    read -p "Output file already exists.  Press Y to DELETE and OVERWRITE, any other key to QUIT." -n 1 -r
+    echo    # (optional) move to a new line
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+	# do dangerous stuff
+	rm "$outFileFull"
+    else
+	exit 1
+    fi
+
+else 
+
+    echo "Output file is: $outFileFull"
+
+fi
+
+
+
+# xsl file specifies how to pull the text out of the html
+# Will be an input arg for: xsltproc --html 
+
+XSL_FILE_DIR=~/Google\ Drive/teaching/code/Canvas/text
+
+XSL_FILE=getQuestionsCNDM.xsl
+
+# concatenate the two parts; use quotes if file_dir includes "\ "
+xslFileFull="$XSL_FILE_DIR/$XSL_FILE"
+
+echo "xsl file is: $xslFileFull"
+
+
+
+
+###############################################################
+# Loop through input files, append all text to one output file
+###############################################################
+
+# Again, as noted above, this script assumes that HTML_FILES_DIR contains _only_
+#   *.html files
+
+for f in $(ls "$HTML_FILES_DIR")
+
+do
+
+    # For monitoring progress
+    echo "Current input file: $f"
+
+    xsltproc --html "$xslFileFull" "$HTML_FILES_DIR/$f" >> "$outFileFull"
+
+done
+
+
+
+
+
