@@ -27,12 +27,17 @@
 
 # ZIP_DIR has been created by unzipping the file downloaded from Inquire
 #   It contains directories, one per student
-ZIP_DIR="/home/anthony/Dropbox/work/teaching/Cog/in-class/responses/first_day/anonymous_questionnaire/2022SP PSYC-241-A-First day ANONYMOUS questionnaire-582010/"
+#ZIP_DIR="/home/anthony/Dropbox/work/teaching/Cog/in-class/responses/first_day/anonymous_questionnaire/2022SP PSYC-241-A-First day ANONYMOUS questionnaire-582010/"
 
 echo "Zip dir. is: $ZIP_DIR"
 
 # cd to ZIP_DIR in order to modify the badly-formed names of the directories it contains
 cd "$ZIP_DIR"
+
+
+# Replace whitespace in student dir. names
+#   Dir. names always end in "_" for some ridiculous reason
+rename 's/ /_/g' *_
 
 # Inquire puts a trailing underscore ("_") at the end of each directory (why??!??).
 #   Remove all trailing underscores,
@@ -47,9 +52,9 @@ rename 's/_$//' *_
 #-------------
 
 # No trailing / 
-OUT_FILE_DIR="/home/anthony/Dropbox/work/teaching/Cog/in-class/responses/first_day/anonymous_questionnaire"
+#OUT_FILE_DIR="/home/anthony/Dropbox/work/teaching/Cog/in-class/responses/first_day/anonymous_questionnaire"
 
-OUT_FILE_NAME=anonymous_questionnaire_responses.txt
+#OUT_FILE_NAME=anonymous_questionnaire_responses.txt
 
 # concatenate the two parts
 outFileFull="$OUT_FILE_DIR/$OUT_FILE_NAME"
@@ -83,12 +88,7 @@ fi
 # XSL FILE
 #---------
 
-# xsl file specifies how to pull the text out of the html
-# Will be an input arg for: xsltproc --html 
-
-XSL_FILE=getAssignmentText.xsl
-
-# concatenate the two parts; use quotes if file_dir includes "\ "
+# concatenate the path and filename; use quotes if path includes "\ "
 #   MUST write full path (e.g. "/home/anthony") NOT "~" for "home"
 xslFileFull="/home/anthony/code/$XSL_FILE"
 
@@ -112,7 +112,12 @@ do
 
     # Print student name or participant number (if anonymous)
     #   Fields could be 1-2 or 1-3 (not sure yet; 2022-01-28)
-    echo $d | cut -d_ -f 1-2 >> "$outFileFull"
+    #
+    #   (If desired; flag variable switches this on/off)
+    if $NO_NAMES; then
+	echo $d | cut -d_ -f 1-2 >> "$outFileFull"
+    fi
+    
 
     # Print a "line" to output file
     echo "-------------------------" >> "$outFileFull"
