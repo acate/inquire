@@ -81,26 +81,9 @@ if [ -z ${OUT_FILE_NAME+x} ]; then
 fi
 
 
-#------------
-# INPUT FILES
-#------------
-
-########## 2023-09-08: Change this to assume that script will
-##################       be run in the dir containing the zip file
-
-
-# ZIP_DIR has been created by unzipping the file downloaded from Inquire
-#   It contains directories, one per student
-#ZIP_DIR="/home/anthony/Dropbox/work/teaching/Cog/in-class/responses/first_day/anonymous_questionnaire/2022SP PSYC-241-A-First day ANONYMOUS questionnaire-582010/"
-
-#echo "Zip dir. is: $ZIP_DIR"
-
-# cd to ZIP_DIR in order to modify the badly-formed names of the directories it contains
-#cd "$ZIP_DIR"
-
-
-############## 2023-09-08: Change next section to include unzipping of zip file
-#####################        into a subdir named "files"
+####################
+# Begin doing stuff
+####################
 
 unzip "$ZIP_FILE" -d files
 
@@ -137,25 +120,14 @@ rename 's/ /_/g' *onlinetext
 ############# 2023-09-08: Change so that it is assumed that OUT_FILE_DIR
 ##################          is always the CWD
 
+# Move back to dir. that we started in
 
-# No trailing /
-
-# The following two vars are supplied in the
-#   assignment_onlinetext_INPUT_EXAMPLE.sh file for the assignment in questions
-#
-# Example:
-#OUT_FILE_DIR="/home/anthony/Dropbox/work/teaching/Cog/in-class/responses/first_day/anonymous_questionnaire"
-#OUT_FILE_NAME=anonymous_questionnaire_responses.txt
-
-# concatenate the two parts
-#outFileFull="$OUT_FILE_DIR/$OUT_FILE_NAME"
+cd ..
 
 
 # Test whether output file already exists
 # If so, prompt user whether to delete and continue or quit.
 
-# Move back to dir. that we started in
-cd ..
 
 if [ -f "$OUT_FILE_NAME" ]; then
 
@@ -226,7 +198,6 @@ do
     # Print empty lines to output file
     echo -e "\n\n" >> "$OUT_FILE_NAME"
     
-
 done
 
 
