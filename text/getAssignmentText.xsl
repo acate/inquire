@@ -14,8 +14,8 @@ indent="no"/>
 
 <xsl:template match="/html/body">
 
-  <!-- match all child <p> nodes of <body> -->
-  <xsl:for-each select="p">
+  <!-- both <p> and other tags hold text, so match any child nodes of <body> -->
+  <xsl:for-each select="./*">
     
     <xsl:value-of select="current()" />
     <xsl:text>&#xa;</xsl:text>

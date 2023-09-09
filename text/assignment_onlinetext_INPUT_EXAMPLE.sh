@@ -12,7 +12,7 @@ OUT_FILE_DIR="/home/anthony/Dropbox/work/teaching/Cog/in-class/responses/first_d
 
 OUT_FILE_NAME=anonymous_questionnaire_responses.txt
 
-NO_NAMES=false
+PRINT_NAMES=true
 
 XSL_FILE=getAssignmentText.xsl
 
@@ -55,11 +55,10 @@ source /home/anthony/code/inquire/text/extract_text_from_assignment_onlinetext.s
 #   (Self-explanatory)
 
 
-# NO_NAMES=false
+# PRINT_NAMES=true
 #
-#   Flag to suppress printing of student names or participant numbers
-#     false -> YES, names are printed
-#     true -> NO, names aren't printed
+#   Flag to enable printing of student names or participant numbers
+
 
 
 #----------#
