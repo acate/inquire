@@ -5,7 +5,11 @@
 # 2022-01-28 by adc
 #
 # USAGE: bash extract_text_from_html_files.sh (use bash, NOT sh)
-#          Need to assign input, output file params by modifying script
+#        Required options:  -z [zip filename]
+#                           -o [output filename]
+#
+#        Optional:          -p (prints names of submitters)
+#
 #
 # For getting text from a set of html files downloaded from Canvas for assignments
 #   where students answered using a text input box.
